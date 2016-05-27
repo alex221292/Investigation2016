@@ -39,7 +39,7 @@ import java.util.Map;
 public class MainController {
     private static final Logger logger = LoggerFactory.getLogger(MainController.class);
 
-    @RequestMapping(value = "/common**", method = RequestMethod.GET)
+    @RequestMapping(value = { "/", "/common**"}, method = RequestMethod.GET)
     public String defaultPage(@RequestParam Map<String, String> selectedItems,
                               Model model) throws Exception {
         String id = selectedItems.get("userid");
@@ -49,10 +49,11 @@ public class MainController {
         return "index";
     }
 
-    @RequestMapping(value = { "/", "/welcome**" }, method = RequestMethod.GET)
+    @RequestMapping(value = {"/welcome**" }, method = RequestMethod.GET)
     public ModelAndView defaultPage() {
 
         ModelAndView model = new ModelAndView();
+        Tools.getPass();
         model.addObject("title", "Spring Security Login Form - Database Authentication");
         model.addObject("message", "This is default page!");
         model.setViewName("hello");
@@ -72,21 +73,8 @@ public class MainController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public ModelAndView login(@RequestParam(value = "error", required = false) String error,
-                              @RequestParam(value = "logout", required = false) String logout) {
-
-        ModelAndView model = new ModelAndView();
-        if (error != null) {
-            model.addObject("error", "Invalid username and password!");
-        }
-
-        if (logout != null) {
-            model.addObject("msg", "You've been logged out successfully.");
-        }
-        model.setViewName("login");
-
-        return model;
-
+    public String loginPage() {
+        return "index";
     }
 
     //for 403 access denied page
@@ -107,7 +95,7 @@ public class MainController {
 
     }
 
-    @RequestMapping(value="/logout", method = RequestMethod.GET)
+    @RequestMapping(value="/logout", method = RequestMethod.POST)
     public String logoutPage (HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null){

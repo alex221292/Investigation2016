@@ -46,6 +46,7 @@ public class UserBeanImpl implements UserBean, InitializingBean {
     }
 
     @Override
+    @Cacheable("user")
     public UserTable getUserById(int id) throws Exception {
         return this.userDao.findByUserId(id);
     }

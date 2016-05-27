@@ -18,6 +18,12 @@ http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 		<property name="annotatedClasses">
 			<list>
 				<value>com.altr.core.Model.UserTable</value>
+				<value>com.altr.core.Model.RolesTable</value>
+				<value>com.altr.core.Model.UserRoles</value>
+				<value>com.altr.core.Model.ProductTable</value>
+				<value>com.altr.core.Model.BoxesTable</value>
+				<value>com.altr.core.Model.OrderTable</value>
+				<value>com.altr.core.Model.CategoryTable</value>
 			</list>
 		</property>
     </bean>

@@ -9,28 +9,26 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-/**
- * Created by Алексей on 21.05.2016.
- */
+
 @Repository("roleDao")
 public class RoleDaoImpl extends CustomHibernateDaoSupport implements RoleDao {
     private static final Logger logger = LoggerFactory.getLogger(RoleDaoImpl.class);
 
-    public void save(RolesTable user){
-        getHibernateTemplate().save(user);
+    public void save(RolesTable role){
+        getHibernateTemplate().save(role);
     }
 
-    public void update(RolesTable user){
-        getHibernateTemplate().update(user);
+    public void update(RolesTable role){
+        getHibernateTemplate().update(role);
     }
 
-    public void delete (RolesTable user){
-        getHibernateTemplate().delete(user);
+    public void delete (RolesTable role){
+        getHibernateTemplate().delete(role);
     }
 
-    public RolesTable findByRoleId(Integer userId){
+    public RolesTable findByRoleId(Integer roleId){
         List list = getHibernateTemplate().find(
-                "from UserTable where id=?",userId
+                "from RoleTable where id=?",roleId
         );
         return (RolesTable)list.get(0);
     }

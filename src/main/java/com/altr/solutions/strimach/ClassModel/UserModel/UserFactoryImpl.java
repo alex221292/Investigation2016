@@ -30,7 +30,6 @@ public class UserFactoryImpl implements UserFactory, InitializingBean {
     }
 
     @Override
-    @Cacheable("user")
     public UserTable getUserById(int id) throws Exception {
         List<Integer> roles =  LoadingBean.UserBean().getRoleIdsByUserId(id);
         if (Tools.isEmpty(roles)) throw new RuntimeException("User does not exist");

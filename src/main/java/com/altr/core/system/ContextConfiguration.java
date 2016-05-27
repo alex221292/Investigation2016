@@ -4,7 +4,6 @@ import com.altr.core.services.UserBean;
 import com.altr.core.services.UserBeanImpl;
 import com.altr.solutions.strimach.ClassModel.UserModel.UserFactory;
 import com.altr.solutions.strimach.ClassModel.UserModel.UserFactoryImpl;
-import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
@@ -12,12 +11,13 @@ import org.springframework.context.annotation.*;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.security.web.DefaultSecurityFilterChain;
+import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
-
 import javax.sql.DataSource;
 
 /**
@@ -29,15 +29,13 @@ import javax.sql.DataSource;
 @ComponentScan("com.altr")
 @Import({ SecurityConfig.class })
 @ImportResource("classpath:spring/config/BeanLocations.xml")
-public class ContextConfiguration {
+public class ContextConfiguration extends WebMvcConfigurerAdapter {
+
     @Bean
     public DataSource dataSource() {
-        final BasicDataSource ds = new BasicDataSource();
-        ds.setDriverClassName("com.mysql.jdbc.Driver");
-        ds.setUrl("jdbc:mysql://localhost:3306/solution");
-        ds.setUsername("root");
-        ds.setPassword("431039");
-        return ds;
+        final JndiDataSourceLookup dsLookup = new JndiDataSourceLookup();
+        dsLookup.setResourceRef(true);
+        return dsLookup.getDataSource("jdbc/ConnectionPool");
     }
 
     @Bean
@@ -47,6 +45,11 @@ public class ContextConfiguration {
         viewResolver.setPrefix("/WEB-INF/views/");
         viewResolver.setSuffix(".jsp");
         return viewResolver;
+    }
+
+    @Override
+    public void addResourceHandlers(final ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
     }
 
     @Bean

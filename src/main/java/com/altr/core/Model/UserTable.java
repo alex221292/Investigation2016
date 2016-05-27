@@ -12,6 +12,7 @@ public class UserTable implements java.io.Serializable {
     private String username;
     private String password;
     private String email;
+    private String enabled;
 
     public Integer getId() {
         return id;
@@ -43,6 +44,14 @@ public class UserTable implements java.io.Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(String enabled) {
+        this.enabled = enabled;
     }
 
     @Override

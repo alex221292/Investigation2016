@@ -11,7 +11,7 @@ import javax.persistence.*;
         @AssociationOverride(name = "id.userId", joinColumns = @JoinColumn(name = "user_id")),
         @AssociationOverride(name = "id.roleId", joinColumns = @JoinColumn(name = "role_id"))
 })
-public class UserRoles {
+public class UserRoles implements java.io.Serializable {
 
     @Id
     private UserRolesPK id;
