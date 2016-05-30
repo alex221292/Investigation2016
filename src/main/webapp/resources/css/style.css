@@ -43,7 +43,7 @@ h1#logo a{ display:block; height:64px; text-indent: -4000px; background:url(imag
 #navigation ul li a.active,
 #navigation ul li a:hover{ background:#fff; color:#8b0000; }
 
-#cart { float:right; width:160px; top:0; right:0; height:51px; background:#8b0000; color:#fff; padding:13px 10px 0 10px; white-space:nowrap; line-height:20px;}
+#cart { float:right; width:160px; top:0; right:0; height:51px; background:#024384; color:#fff; padding:13px 10px 0 10px; white-space:nowrap; line-height:20px;}
 a.cart-link { color:#fff; background:url(images/cart-link.gif) no-repeat 0 0; padding:0 0 0 32px; text-decoration: none;}
 a.cart-link:hover { text-decoration: underline;}
 
@@ -59,7 +59,7 @@ a.cart-link:hover { text-decoration: underline;}
 
 a.bul { background:url(images/bul.gif) no-repeat 0 center; padding-left:0px;}
 
-.login { min-height:100px;}
+.login { min-height:80px;}
 
 .search { min-height:252px;}
 .search label { display:block; padding-bottom:3px; }
@@ -73,6 +73,7 @@ a.bul { background:url(images/bul.gif) no-repeat 0 center; padding-left:0px;}
 
 .search-submit { width:70px; background:#8b0000; border:0; color:#fff; height:27px; display:inline-block; line-height:26px; cursor:pointer; margin:5px 5px 10px 0; white-space:nowrap}
 .register-submit { width:70px; background:#8b0000; border:0; color:#fff; height:27px; display:inline-block; line-height:26px; cursor:pointer; margin:5px 0 10px 0; white-space:nowrap}
+.buy-submit { width:70px; background:#8b0000; border:0; color:#fff; height:27px; display:inline-block; line-height:26px; cursor:pointer; margin:5px 0 10px 0; white-space:nowrap}
 
 .categories { min-height:383px; }
 .categories ul { list-style-type: none; font-size:13px;}
@@ -94,7 +95,7 @@ a.bul { background:url(images/bul.gif) no-repeat 0 center; padding-left:0px;}
 
 .products {}
 .products ul{ list-style-type: none;}
-.products ul li{ position:relative; padding:1px; border:solid 1px #dedede; float:left; width:231px; margin-right:9px; height:383px; overflow:hidden; }
+.products ul li{ position:relative; padding:1px; border:solid 1px #dedede; float:left; width:220px; margin-right:9px; height:383px; overflow:hidden; }
 .products ul li.last{ margin-right:0; }
 
 .product-info{ position:absolute; width:153px; top:194px; left:0;}

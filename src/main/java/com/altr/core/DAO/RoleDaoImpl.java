@@ -1,8 +1,6 @@
 package com.altr.core.DAO;
 
 import com.altr.core.Model.RolesTable;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;

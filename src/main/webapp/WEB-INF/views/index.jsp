@@ -9,7 +9,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
-    <title>Shop</title>
+    <meta name="_csrf" content="${_csrf.token}"/>
+    <meta name="_csrf_header" content="${_csrf.headerName}"/>
+
+    <title>${title}</title>
     <link rel="stylesheet" href="<c:url value="/resources/css/style.css" />" type="text/css" media="all"/>
 
 
@@ -26,6 +29,7 @@
 
 </head>
 <body onload='document.loginForm.username.focus();'>
+<sec:csrfMetaTags/>
 
 <!-- Shell -->
 <div class="shell">
@@ -39,9 +43,9 @@
             <a href="#" class="cart-link">Your Shopping Cart</a>
 
             <div class="cl">&nbsp;</div>
-            <span>Articles: <strong>4</strong></span>
+            <span>Articles: <strong id="articles"></strong></span>
             &nbsp;&nbsp;
-            <span>Cost: <strong>$250.99</strong></span>
+            <span>Cost: <strong id="fullPrice"></strong></span>
         </div>
         <!-- End Cart -->
 
@@ -89,48 +93,23 @@
             <div class="products">
                 <div class="cl">&nbsp;</div>
                 <ul>
-                    <li>
-                        <a href="#"><img src="<c:url value="/resources/css/images/big1.jpg" />" alt=""/></a>
+                    <c:forEach items="${pageinfo.products}" var="product">
+                        <li>
+                            <form id="add-item${product.id}">
+                                <input type="hidden" id="productid" name="productid" value="${product.id}"/>
+                                <input name="submit" type="submit" value="Buy" class="buy-submit"/>
 
-                        <div class="product-info">
-                            <h3>LOREM IPSUM</h3>
+                                <div class="product-info">
+                                    <h3>${product.name}</h3>
 
-                            <div class="product-desc">
-                                <h4>WOMEN’S</h4>
-
-                                <p>Lorem ipsum dolor sit<br/>amet</p>
-                                <strong class="price">$58.99</strong>
-                            </div>
-                        </div>
-                    </li>
-                    <li>
-                        <a href="#"><img src="<c:url value="/resources/css/images/big1.jpg" />" alt=""/></a>
-
-                        <div class="product-info">
-                            <h3>LOREM IPSUM</h3>
-
-                            <div class="product-desc">
-                                <h4>WOMEN’S</h4>
-
-                                <p>Lorem ipsum dolor sit<br/>amet</p>
-                                <strong class="price">$58.99</strong>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="last">
-                        <a href="#"><img src="<c:url value="/resources/css/images/big1.jpg" />" alt=""/></a>
-
-                        <div class="product-info">
-                            <h3>LOREM IPSUM</h3>
-
-                            <div class="product-desc">
-                                <h4>WOMEN’S</h4>
-
-                                <p>Lorem ipsum dolor sit<br/>amet</p>
-                                <strong class="price">$58.99</strong>
-                            </div>
-                        </div>
-                    </li>
+                                    <div class="product-desc">
+                                        <h4>${product.description}</h4>
+                                        <strong class="price">${product.cost} ₽</strong>
+                                    </div>
+                                </div>
+                            </form>
+                        </li>
+                    </c:forEach>
                 </ul>
                 <div class="cl">&nbsp;</div>
             </div>
@@ -179,6 +158,7 @@
                 <div class="box login">
                     <div class="box-content">
                         <h2>Welcome ${pageContext.request.userPrincipal.name}<span></span></h2>
+
                         <form name='logoutForm'
                               action="<c:url value='/logout' />" method='POST'>
                             <input name="submit" type="submit"
@@ -203,6 +183,9 @@
                         <label>Category</label>
                         <select class="field">
                             <option value="">-- Select Category --</option>
+                            <c:forEach items="${pageinfo.categories}" var="category">
+                                <option value="${category.id}">${category.name}</option>
+                            </c:forEach>
                         </select>
 
                         <div class="inline-field">
@@ -218,11 +201,6 @@
 
                         <input type="submit" class="search-submit" value="Search"/>
 
-                        <p>
-                            <a href="#" class="bul">Advanced search</a><br/>
-                            <a href="#" class="bul">Contact Customer Support</a>
-                        </p>
-
                     </form>
                 </div>
             </div>
@@ -234,19 +212,9 @@
 
                 <div class="box-content">
                     <ul>
-                        <li><a href="#">Category 1</a></li>
-                        <li><a href="#">Category 2</a></li>
-                        <li><a href="#">Category 3</a></li>
-                        <li><a href="#">Category 4</a></li>
-                        <li><a href="#">Category 5</a></li>
-                        <li><a href="#">Category 6</a></li>
-                        <li><a href="#">Category 7</a></li>
-                        <li><a href="#">Category 8</a></li>
-                        <li><a href="#">Category 9</a></li>
-                        <li><a href="#">Category 10</a></li>
-                        <li><a href="#">Category 11</a></li>
-                        <li><a href="#">Category 12</a></li>
-                        <li class="last"><a href="#">Category 13</a></li>
+                        <c:forEach items="${pageinfo.categories}" var="category">
+                            <li><a href="?cat=${category.id}">${category.name}</a></li>
+                        </c:forEach>
                     </ul>
                 </div>
             </div>
@@ -361,20 +329,81 @@
     <!-- End Footer -->
 
 </div>
-<!-- End Shell -->
-<div class="container">
-    <table align="center" border="0" cellpadding="0" cellspacing="0" style="height:75px; width:560px">
-        <tbody>
-        <tr>
-            <td style="height:75px; text-align:center; vertical-align:middle; width:560px">
-                <p><a href="http://partners-pro.ru" target="_blank"><img
-                        alt="Изготовление партнёрских интернет-магазинов и бесплатных сайтов"
-                        src="http://partners-pro.ru/site-free/banner.gif" style="height:75px; width:560px"/></a></p>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
+<div id="jsontest"></div>
+
+
+<!-- JQUERY PART -->
+<script>
+
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+
+    $(document).ajaxSend(function (e, xhr, options) {
+        xhr.setRequestHeader(header, token);
+    });
+
+    jQuery(document).ready(function ($) {
+
+        var itemsCount = "${sessionScope.itemsCount}";
+        if (itemsCount == "") itemsCount = "0";
+        $('#articles').html(itemsCount);
+
+        var fullPrice = "${sessionScope.fullPrice}";
+        if (fullPrice == "") fullPrice = "0";
+        $('#fullPrice').html(fullPrice + " ₽");
+
+
+
+        $('[id*="add-item"]').submit(function (event) {
+
+
+            // Prevent the form from submitting via the browser.
+            event.preventDefault();
+
+            searchViaAjax($(this).find('#productid').val());
+
+        });
+
+    });
+
+    function searchViaAjax(productId) {
+
+        var productItem = {};
+        productItem["productId"] = productId;
+
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            url: "additem",
+            data: JSON.stringify(productItem),
+            dataType: 'json',
+            timeout: 100000,
+            success: function (data) {
+                console.log(data);
+                display(data);
+            },
+            error: function (e) {
+                console.log("ERROR: ", e);
+                display(e);
+            },
+            done: function (e) {
+                console.log("DONE");
+            }
+        });
+
+        function display(data) {
+            var itemsCount = data['results'].itemsCount;
+            if (itemsCount == "") itemsCount = "0";
+            var fullPrice = data['results'].fullPrice;
+            if (fullPrice == "") fullPrice = "0";
+            $('#articles').html(itemsCount);
+            $('#fullPrice').html(fullPrice + " ₽");
+        }
+
+    }
+
+</script>
+
 
 </body>
 </html>

@@ -1,22 +1,12 @@
-package com.altr.core.controller;
+package com.altr.core.web.controller;
 
 
-import com.altr.core.Model.UserTable;
-import com.altr.core.services.UserBean;
-import com.altr.core.services.UserBeanImpl;
-import com.altr.core.system.ContextConfiguration;
-import com.altr.core.system.JdbcInstance;
-import com.altr.core.system.LoadingBean;
+import com.altr.core.services.business.shopservice.ShopBean;
 import com.altr.core.system.Tools;
-import com.altr.solutions.strimach.ClassModel.UserModel.Admin;
-import com.altr.solutions.strimach.ClassModel.UserModel.User;
-import com.altr.solutions.strimach.ClassModel.UserModel.UserFactory;
+import com.altr.core.system.view.CommonPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,32 +14,40 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 @Controller
 public class MainController {
     private static final Logger logger = LoggerFactory.getLogger(MainController.class);
 
-    @RequestMapping(value = { "/", "/common**"}, method = RequestMethod.GET)
-    public String defaultPage(@RequestParam Map<String, String> selectedItems,
+    @Autowired
+    private CommonPage commonPage;
+
+    @Autowired
+    private ShopBean shopBean;
+
+    @RequestMapping(value = {"/"}, method = RequestMethod.GET)
+    public String defaultPage(@RequestParam Map<String, String> request,
                               Model model) throws Exception {
-        String id = selectedItems.get("userid");
-            if (id == null) id = "1";
-            UserTable userTable = LoadingBean.UserBean().getUserById(1);
-            model.addAttribute("user", userTable);
+        Integer categoryId = 1;
+        try {
+            categoryId = Integer.parseInt(request.get("cat"));
+        } catch (Exception e) {
+            model.addAttribute("pageerror", e.getMessage());
+        }
+        commonPage.pageLoad(categoryId);
+        model.addAttribute("title", "Air Shop");
+        model.addAttribute("pageinfo", commonPage);
         return "index";
     }
 
-    @RequestMapping(value = {"/welcome**" }, method = RequestMethod.GET)
+
+    @RequestMapping(value = {"/welcome**"}, method = RequestMethod.GET)
     public ModelAndView defaultPage() {
 
         ModelAndView model = new ModelAndView();
@@ -95,13 +93,13 @@ public class MainController {
 
     }
 
-    @RequestMapping(value="/logout", method = RequestMethod.POST)
-    public String logoutPage (HttpServletRequest request, HttpServletResponse response) {
+    @RequestMapping(value = "/logout", method = RequestMethod.POST)
+    public String logoutPage(HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null){
+        if (auth != null) {
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
-        return "redirect:/login?logout";
+        return "redirect:/common?logout";
     }
 
 

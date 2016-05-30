@@ -13,7 +13,10 @@ public class ProductTable implements java.io.Serializable {
     private String cost;
     private String description;
 
-    @ManyToOne(cascade=CascadeType.ALL)
+    @Column(name = "image_name")
+    private String image;
+
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id")
     private CategoryTable category;
 
@@ -55,6 +58,14 @@ public class ProductTable implements java.io.Serializable {
 
     public void setCategory(CategoryTable category) {
         this.category = category;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     @Override

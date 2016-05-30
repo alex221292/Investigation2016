@@ -1,9 +1,10 @@
-package com.altr.core.services;
+package com.altr.core.services.ImplService;
 
 import com.altr.core.DAO.RoleDao;
 import com.altr.core.DAO.UserDao;
 import com.altr.core.Model.RolesTable;
 import com.altr.core.Model.UserTable;
+import com.altr.core.services.IService.UserBean;
 import com.altr.core.system.JdbcInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,13 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Алексей on 21.05.2016.
- */
+
 @Service("userBean")
 public class UserBeanImpl implements UserBean, InitializingBean {
     private static final Logger logger = LoggerFactory.getLogger(UserBeanImpl.class);
@@ -61,5 +58,20 @@ public class UserBeanImpl implements UserBean, InitializingBean {
     public List<Integer> getRoleIdsByUserId(int id) throws Exception {
         return JdbcInstance.getJDBC().queryForList("select role_id from user_roles where user_id = ?", new Object[]{id}, Integer.class);
 
+    }
+
+    @Override
+    public void updateUser(UserTable userTable) throws Exception{
+        userDao.update(userTable);
+    }
+
+    @Override
+    public void deleteUser(UserTable userTable) throws Exception{
+        userDao.delete(userTable);
+    }
+
+    @Override
+    public void saveUser(UserTable userTable) throws Exception{
+        userDao.save(userTable);
     }
 }

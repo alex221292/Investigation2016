@@ -1,6 +1,5 @@
 package com.altr.core.DAO;
 
-import com.altr.core.Model.UserRoles;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

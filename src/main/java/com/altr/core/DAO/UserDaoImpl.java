@@ -1,13 +1,10 @@
 package com.altr.core.DAO;
 
 import com.altr.core.Model.UserTable;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 /**
