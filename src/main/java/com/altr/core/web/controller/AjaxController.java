@@ -4,6 +4,7 @@ import com.altr.core.services.business.shopservice.ShopBean;
 import com.altr.core.web.jsonview.Views;
 import com.altr.core.web.model.json.AjaxResponseBody;
 import com.altr.core.web.model.json.CartItem;
+import com.altr.core.web.model.json.PageContext;
 import com.altr.core.web.model.json.ShoppingCart;
 import com.altr.core.web.session.Product;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -29,12 +30,12 @@ public class AjaxController {
     private ShopBean shopBean;
 
     @JsonView(Views.Public.class)
-    @RequestMapping(value = "/additem",
+    @RequestMapping(value = "/cart/api/addItem",
             method = RequestMethod.POST,
             headers = {"content-type=application/json"},
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public AjaxResponseBody getSearchResultViaAjax(@RequestBody CartItem cartItem, HttpSession session) throws Exception {
+    public AjaxResponseBody setCartItem(@RequestBody CartItem cartItem, HttpSession session) throws Exception {
         AjaxResponseBody response = new AjaxResponseBody();
         ShoppingCart shoppingCart = new ShoppingCart();
         if (cartItem != null && cartItem.getProductId() != null) {
@@ -44,6 +45,7 @@ public class AjaxController {
                 shopBean.getCart(cartItem.getProductId(), shoppingCart);
                 session.setAttribute("products", shoppingCart.getProducts());
                 session.setAttribute("itemsCount", shoppingCart.getItemsCount());
+                session.setAttribute("fullPrice", shoppingCart.getFullPrice());
             } else {
                 shoppingCart.setProducts((List<Product>)session.getAttribute("products"));
                 shopBean.getCart(cartItem.getProductId(), shoppingCart);
@@ -58,6 +60,47 @@ public class AjaxController {
             response.setCode("800");
             response.setMsg("Error");
         }
+        return response;
+    }
+
+    @JsonView(Views.Public.class)
+    @RequestMapping(value = "/page/api/loadPage",
+            method = RequestMethod.POST,
+            headers = {"content-type=application/json"},
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public AjaxResponseBody loadPage(HttpSession session) throws Exception {
+        AjaxResponseBody response = new AjaxResponseBody();
+        PageContext pageContext = new PageContext();
+        String itemsCount = (String)session.getAttribute("itemsCount");
+        if (itemsCount == null) itemsCount = "0";
+        String fullPrice = (String)session.getAttribute("fullPrice");
+        if (fullPrice ==null) fullPrice = "0";
+        pageContext.setFullPrice(fullPrice);
+        pageContext.setItemsCount(itemsCount);
+        response.setCode("200");
+        response.setResults(pageContext);
+        return response;
+    }
+
+    @JsonView(Views.Public.class)
+    @RequestMapping(value = "/cart/api/prepareOrder",
+            method = RequestMethod.POST,
+            headers = {"content-type=application/json"},
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public AjaxResponseBody prepareOrder(HttpSession session) throws Exception {
+        AjaxResponseBody response = new AjaxResponseBody();
+        PageContext pageContext = new PageContext();
+        pageContext.setProducts((List<Product>)session.getAttribute("products"));
+        String itemsCount = (String)session.getAttribute("itemsCount");
+        if (itemsCount == null) itemsCount = "0";
+        String fullPrice = (String)session.getAttribute("fullPrice");
+        if (fullPrice ==null) fullPrice = "0";
+        pageContext.setFullPrice(fullPrice);
+        pageContext.setItemsCount(itemsCount);
+        response.setCode("200");
+        response.setResults(pageContext);
         return response;
     }
 
