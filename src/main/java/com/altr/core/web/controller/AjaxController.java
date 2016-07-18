@@ -1,12 +1,9 @@
 package com.altr.core.web.controller;
 
 import com.altr.core.services.business.shopservice.ShopBean;
+import com.altr.core.system.view.CommonPage;
 import com.altr.core.web.jsonview.Views;
-import com.altr.core.web.model.json.AjaxResponseBody;
-import com.altr.core.web.model.json.CartItem;
-import com.altr.core.web.model.json.PageContext;
-import com.altr.core.web.model.json.ShoppingCart;
-import com.altr.core.web.session.Product;
+import com.altr.core.web.model.json.*;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,12 +16,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 public class AjaxController {
     private static final Logger logger = LoggerFactory.getLogger(AjaxController.class);
+
+    @Autowired
+    private CommonPage commonPage;
 
     @Autowired
     private ShopBean shopBean;
@@ -69,7 +68,7 @@ public class AjaxController {
             headers = {"content-type=application/json"},
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public AjaxResponseBody loadPage(HttpSession session) throws Exception {
+    public AjaxResponseBody loadPage(@RequestBody CartItem cartItem, HttpSession session) throws Exception {
         AjaxResponseBody response = new AjaxResponseBody();
         PageContext pageContext = new PageContext();
         String itemsCount = (String)session.getAttribute("itemsCount");
@@ -78,6 +77,14 @@ public class AjaxController {
         if (fullPrice ==null) fullPrice = "0";
         pageContext.setFullPrice(fullPrice);
         pageContext.setItemsCount(itemsCount);
+        Integer categoryId = 1;
+        try {
+            if (!StringUtils.isEmpty(cartItem.getProductId()))
+                categoryId = Integer.parseInt(cartItem.getProductId());
+            commonPage.pageLoad(categoryId, pageContext);
+        } catch (Exception e){
+            logger.info("[loadPage] ERROR " + e.toString());
+        }
         response.setCode("200");
         response.setResults(pageContext);
         return response;
@@ -93,12 +100,6 @@ public class AjaxController {
         AjaxResponseBody response = new AjaxResponseBody();
         PageContext pageContext = new PageContext();
         pageContext.setProducts((List<Product>)session.getAttribute("products"));
-        String itemsCount = (String)session.getAttribute("itemsCount");
-        if (itemsCount == null) itemsCount = "0";
-        String fullPrice = (String)session.getAttribute("fullPrice");
-        if (fullPrice ==null) fullPrice = "0";
-        pageContext.setFullPrice(fullPrice);
-        pageContext.setItemsCount(itemsCount);
         response.setCode("200");
         response.setResults(pageContext);
         return response;

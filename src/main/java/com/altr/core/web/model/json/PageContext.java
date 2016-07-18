@@ -6,12 +6,11 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 import java.util.List;
 
-public class ShoppingCart {
-
-    public ShoppingCart() {
+public class PageContext {
+    public PageContext() {
     }
 
-    public ShoppingCart(String itemsCount, String fullPrice) {
+    public PageContext(String itemsCount, String fullPrice) {
         this.itemsCount = itemsCount;
         this.fullPrice = fullPrice;
     }
@@ -24,6 +23,9 @@ public class ShoppingCart {
 
     @JsonView(Views.Public.class)
     private List<Product> products;
+
+    @JsonView(Views.Public.class)
+    private List<Category> categories;
 
     public String getItemsCount() {
         return itemsCount;
@@ -49,13 +51,20 @@ public class ShoppingCart {
         this.products = products;
     }
 
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
+    }
+
     @Override
     public String toString() {
-        return "ShoppingCart{" +
+        return "PageContext{" +
                 "itemsCount='" + itemsCount + '\'' +
                 ", fullPrice='" + fullPrice + '\'' +
                 ", products=" + products +
                 '}';
     }
-
 }

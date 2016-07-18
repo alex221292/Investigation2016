@@ -1,5 +1,4 @@
-package com.altr.core.web.session;
-
+package com.altr.core.web.model.json;
 
 public class Product {
     private String id;

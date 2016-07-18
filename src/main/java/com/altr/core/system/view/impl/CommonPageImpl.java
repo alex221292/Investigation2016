@@ -6,6 +6,9 @@ import com.altr.core.Model.ProductTable;
 import com.altr.core.services.IService.CategoryBean;
 import com.altr.core.services.IService.ProductBean;
 import com.altr.core.system.view.CommonPage;
+import com.altr.core.web.model.json.Category;
+import com.altr.core.web.model.json.PageContext;
+import com.altr.core.web.model.json.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,27 +23,24 @@ public class CommonPageImpl implements CommonPage {
     @Autowired
     private ProductBean productBean;
 
-    private List<CategoryTable> categories = new ArrayList<CategoryTable>();
     private List<ProductTable> products = new ArrayList<ProductTable>();
     private Integer categoryId;
 
     @Override
-    public void pageLoad(Integer categoryId) throws Exception{
-        categories = categoryBean.findAll();
-        CategoryTable categoryInstance = categoryBean.findById(categoryId);
-        this.categoryId = categoryInstance.getId();
-        products = categoryInstance.getProducts();
+    public void pageLoad(Integer categoryId, PageContext pageContext) throws Exception {
+        List<CategoryTable> categories = categoryBean.findAll();
+        List<Category> jsonCategories = new ArrayList<Category>();
+        List<Product> jsonProducts = new ArrayList<Product>();
+        for (CategoryTable categoryTable : categories) {
+            jsonCategories.add(new Category(categoryTable.getName(), categoryTable.getId().toString()));
+            if (categoryId.equals(categoryTable.getId())){
+                for (ProductTable productTable : categoryTable.getProducts()){
+                    jsonProducts.add(new Product(productTable.getId().toString(), productTable.getName(), productTable.getCost()));
+                }
+            }
+        }
+        pageContext.setCategories(jsonCategories);
+        pageContext.setProducts(jsonProducts);
     }
 
-    public List<CategoryTable> getCategories() {
-        return categories;
-    }
-
-    public List<ProductTable> getProducts() {
-        return products;
-    }
-
-    public Integer getCategoryId() {
-        return categoryId;
-    }
 }

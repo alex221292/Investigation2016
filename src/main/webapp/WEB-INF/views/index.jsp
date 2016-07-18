@@ -25,6 +25,8 @@
     <script src="<c:url value="/resources/js/jquery-1.4.1.min.js" />" type="text/javascript"></script>
     <script src="<c:url value="/resources/js/jquery.jcarousel.pack.js" />" type="text/javascript"></script>
     <script src="<c:url value="/resources/js/jquery-func.js" />" type="text/javascript"></script>
+    <script src="<c:url value="/resources/js/jquery.cookie.js" />" type="text/javascript"></script>
+    <script src="<c:url value="/resources/js/custom-jquery.js" />" type="text/javascript"></script>
     <!-- End JS -->
 
 </head>
@@ -40,7 +42,7 @@
 
         <!-- Cart -->
         <div id="cart">
-            <a href="#" class="cart-link">Your Shopping Cart</a>
+            <a href="" class="cart-link popup-link-1">Your Shopping Cart</a>
 
             <div class="cl">&nbsp;</div>
             <span>Articles: <strong id="articles"></strong></span>
@@ -74,10 +76,10 @@
             <div id="slider" class="box">
                 <div id="slider-holder">
                     <ul>
-                        <li><a href="#"><img src="<c:url value="/resources/css/images/slide1.jpg" />" alt=""/></a></li>
-                        <li><a href="#"><img src="<c:url value="/resources/css/images/slide1.jpg" />" alt=""/></a></li>
-                        <li><a href="#"><img src="<c:url value="/resources/css/images/slide1.jpg" />" alt=""/></a></li>
-                        <li><a href="#"><img src="<c:url value="/resources/css/images/slide1.jpg" />" alt=""/></a></li>
+                        <li><a href="#"><img src="<c:url value="/resources/css/images/slide.jpg" />" alt=""/></a></li>
+                        <li><a href="#"><img src="<c:url value="/resources/css/images/slide.jpg" />" alt=""/></a></li>
+                        <li><a href="#"><img src="<c:url value="/resources/css/images/slide.jpg" />" alt=""/></a></li>
+                        <li><a href="#"><img src="<c:url value="/resources/css/images/slide.jpg" />" alt=""/></a></li>
                     </ul>
                 </div>
                 <div id="slider-nav">
@@ -93,23 +95,7 @@
             <div class="products">
                 <div class="cl">&nbsp;</div>
                 <ul>
-                    <c:forEach items="${pageinfo.products}" var="product">
-                        <li>
-                            <form id="add-item${product.id}">
-                                <input type="hidden" id="productid" name="productid" value="${product.id}"/>
-                                <input name="submit" type="submit" value="Buy" class="buy-submit"/>
 
-                                <div class="product-info">
-                                    <h3>${product.name}</h3>
-
-                                    <div class="product-desc">
-                                        <h4>${product.description}</h4>
-                                        <strong class="price">${product.cost} ₽</strong>
-                                    </div>
-                                </div>
-                            </form>
-                        </li>
-                    </c:forEach>
                 </ul>
                 <div class="cl">&nbsp;</div>
             </div>
@@ -211,10 +197,7 @@
                 <h2>Categories <span></span></h2>
 
                 <div class="box-content">
-                    <ul>
-                        <c:forEach items="${pageinfo.categories}" var="category">
-                            <li><a href="?cat=${category.id}">${category.name}</a></li>
-                        </c:forEach>
+                    <ul class="box-content-categories">
                     </ul>
                 </div>
             </div>
@@ -329,80 +312,15 @@
     <!-- End Footer -->
 
 </div>
-<div id="jsontest"></div>
+<div class="popup-box" id="popup-box-1">
+    <div class="close">X</div>
+    <div class="top">
+        <h2>Prepare your order</h2>
+    </div>
+    <div class="products-popup">
 
-
-<!-- JQUERY PART -->
-<script>
-
-    var token = $("meta[name='_csrf']").attr("content");
-    var header = $("meta[name='_csrf_header']").attr("content");
-
-    $(document).ajaxSend(function (e, xhr, options) {
-        xhr.setRequestHeader(header, token);
-    });
-
-    jQuery(document).ready(function ($) {
-
-        var itemsCount = "${sessionScope.itemsCount}";
-        if (itemsCount == "") itemsCount = "0";
-        $('#articles').html(itemsCount);
-
-        var fullPrice = "${sessionScope.fullPrice}";
-        if (fullPrice == "") fullPrice = "0";
-        $('#fullPrice').html(fullPrice + " ₽");
-
-
-
-        $('[id*="add-item"]').submit(function (event) {
-
-
-            // Prevent the form from submitting via the browser.
-            event.preventDefault();
-
-            searchViaAjax($(this).find('#productid').val());
-
-        });
-
-    });
-
-    function searchViaAjax(productId) {
-
-        var productItem = {};
-        productItem["productId"] = productId;
-
-        $.ajax({
-            type: "POST",
-            contentType: "application/json",
-            url: "additem",
-            data: JSON.stringify(productItem),
-            dataType: 'json',
-            timeout: 100000,
-            success: function (data) {
-                console.log(data);
-                display(data);
-            },
-            error: function (e) {
-                console.log("ERROR: ", e);
-                display(e);
-            },
-            done: function (e) {
-                console.log("DONE");
-            }
-        });
-
-        function display(data) {
-            var itemsCount = data['results'].itemsCount;
-            if (itemsCount == "") itemsCount = "0";
-            var fullPrice = data['results'].fullPrice;
-            if (fullPrice == "") fullPrice = "0";
-            $('#articles').html(itemsCount);
-            $('#fullPrice').html(fullPrice + " ₽");
-        }
-
-    }
-
-</script>
+    </div>
+</div>
 
 
 </body>

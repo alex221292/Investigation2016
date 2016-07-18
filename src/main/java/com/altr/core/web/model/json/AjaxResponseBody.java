@@ -14,7 +14,7 @@ public class AjaxResponseBody {
     String code;
 
     @JsonView(Views.Public.class)
-    ShoppingCart results;
+    Object results;
 
     public String getMsg() {
         return msg;
@@ -32,11 +32,11 @@ public class AjaxResponseBody {
         this.code = code;
     }
 
-    public ShoppingCart getResults() {
+    public Object getResults() {
         return results;
     }
 
-    public void setResults(ShoppingCart results) {
+    public void setResults(Object results) {
         this.results = results;
     }
 

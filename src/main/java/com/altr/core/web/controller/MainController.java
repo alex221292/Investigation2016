@@ -34,15 +34,7 @@ public class MainController {
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
     public String defaultPage(@RequestParam Map<String, String> request,
                               Model model) throws Exception {
-        Integer categoryId = 1;
-        try {
-            categoryId = Integer.parseInt(request.get("cat"));
-        } catch (Exception e) {
-            model.addAttribute("pageerror", e.getMessage());
-        }
-        commonPage.pageLoad(categoryId);
         model.addAttribute("title", "Air Shop");
-        model.addAttribute("pageinfo", commonPage);
         return "index";
     }
 

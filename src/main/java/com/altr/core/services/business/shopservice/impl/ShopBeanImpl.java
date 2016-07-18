@@ -9,16 +9,13 @@ import com.altr.core.services.IService.ProductBean;
 import com.altr.core.services.IService.UserBean;
 import com.altr.core.services.business.shopservice.ShopBean;
 import com.altr.core.system.JdbcInstance;
-import com.altr.core.web.model.json.AjaxResponseBody;
+import com.altr.core.web.model.json.Product;
 import com.altr.core.web.model.json.ShoppingCart;
-import com.altr.core.web.session.Product;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
